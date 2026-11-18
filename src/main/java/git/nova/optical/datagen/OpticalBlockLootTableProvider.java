@@ -6,7 +6,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.fml.common.Mod;
 
 import java.util.Set;
 
@@ -17,12 +16,12 @@ public class OpticalBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        // dropSelf(ModBlocks.OPTICAL_GLASS.get());
+        dropSelf(ModBlocks.SPOTLIGHT.get());
+        dropSelf(ModBlocks.LIGHT_DIODE.get());
     }
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        
         return ModBlocks.BLOCKS.getEntries().stream().map(Holder::value)::iterator;
     }
 }

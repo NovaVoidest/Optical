@@ -1,2 +1,23 @@
 {
+  "itemGroup.optical": "Optical",
+
+  "block.optical.spotlight": "Spotlight",
+  "block.optical.light_diode": "Light Diode",
+
+  "item.optical.optical_key": "Optical Key",
+  "item.optical.glowstick": "Glowstick",
+
+  "tooltip.optical.optical_key.1": "Left click a spotlight to select a parameter",
+  "tooltip.optical.optical_key.2": "Hold right click and move the mouse to adjust",
+  "tooltip.optical.optical_key.3": "Hold Shift for fine adjustment",
+
+  "tooltip.optical.glowstick.intact": "Uncracked",
+  "tooltip.optical.glowstick.hint": "Right click to crack it",
+  "tooltip.optical.glowstick.lit": "Glowing - %ss of light left",
+  "tooltip.optical.glowstick.burns": "Burns out on its own",
+  "tooltip.optical.glowstick.spent": "Spent",
+
+  "hud.optical.size": "Size",
+  "hud.optical.distance": "Distance",
+  "hud.optical.rotation": "Rotation"
 }

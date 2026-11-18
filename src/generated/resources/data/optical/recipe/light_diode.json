@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "c": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "pattern": [
+    " c ",
+    "cGc",
+    " c "
+  ],
+  "result": {
+    "count": 1,
+    "id": "optical:light_diode"
+  }
+}

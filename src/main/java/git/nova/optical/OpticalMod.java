@@ -1,22 +1,24 @@
 package git.nova.optical;
 
+import git.nova.optical.init.ModDataComponents;
+import git.nova.optical.init.blocks.ModBlockEntities;
 import git.nova.optical.init.blocks.ModBlocks;
 import git.nova.optical.init.items.ModItems;
-import net.minecraft.world.item.*;
-import org.slf4j.Logger;
-
-import com.mojang.logging.LogUtils;
-
+import git.nova.optical.network.OpticalNetwork;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.slf4j.Logger;
+
+import com.mojang.logging.LogUtils;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(OpticalMod.MODID)
@@ -33,22 +35,23 @@ public class OpticalMod {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
-    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public OpticalMod(IEventBus modEventBus, ModContainer modContainer) {
+        ModDataComponents.register(modEventBus);
         ModItems.register(modEventBus);
-        ModBlocks.register(modEventBus);// Register the commonSetup method for modloading
+        ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+
+        modEventBus.addListener(OpticalNetwork::register);
         modEventBus.addListener(this::commonSetup);
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
+
         NeoForge.EVENT_BUS.register(this);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
+
     private void commonSetup(FMLCommonSetupEvent event) {
-        // Some common setup code
-        LOGGER.info("Hello from Optical Common Setup!");
+        LOGGER.info("Optical common setup complete");
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

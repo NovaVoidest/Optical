@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": {
+      "item": "minecraft:copper_bulb"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "c": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "pattern": [
+    "cGc",
+    "cBc",
+    "ccc"
+  ],
+  "result": {
+    "count": 1,
+    "id": "optical:spotlight"
+  }
+}

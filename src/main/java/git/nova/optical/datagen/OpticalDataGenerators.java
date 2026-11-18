@@ -46,6 +46,5 @@ public class OpticalDataGenerators {
         // Client-side assets (Blockstates, Models, Lang)
         generator.addProvider(event.includeClient(), new OpticalBlockStateProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new OpticalItemModelProvider(packOutput, existingFileHelper));
-        generator.addProvider(event.includeClient(), new OpticalLanguageProvider(packOutput, "en_us"));
     }
 }
