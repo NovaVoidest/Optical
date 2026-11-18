@@ -34,12 +34,6 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Owns all client-side Veil light handles for Optical blocks and the glowstick.
- * <p>
- * Lights are only ever created on the client. Block entities tell this manager when they are
- * loaded or removed; the manager keeps the Veil handles in sync with the block state each tick.
- */
 @EventBusSubscriber(modid = OpticalMod.MODID, value = Dist.CLIENT)
 public final class ClientLightManager {
 
@@ -62,7 +56,6 @@ public final class ClientLightManager {
     private static final float GLOWSTICK_GREEN = 1.0F;
     private static final float GLOWSTICK_BLUE = 0.3F;
 
-    /** Very small brightness wobble, barely visible but enough to feel alive. */
     private static final float DIODE_FLICKER_AMOUNT = 0.04F;
     private static final float GLOWSTICK_FLICKER_AMOUNT = 0.05F;
 
@@ -230,20 +223,18 @@ public final class ClientLightManager {
             }
 
             Direction facing = state.getValue(SpotlightBlock.FACING);
-            float rotation = spotlight.getRotationDegrees();
+            int rotation = state.getValue(SpotlightBlock.ROTATION);
+            float tilt = spotlight.getRotationDegrees();
             BlockPos pos = spotlight.getBlockPos();
 
-            Vector3f origin = SpotlightBeamGeometry.lensPosition(facing, rotation);
-            Vector3f beam = SpotlightBeamGeometry.beamDirection(facing, rotation);
+            Vector3f origin = SpotlightBeamGeometry.lensPosition(facing, rotation, tilt);
+            Vector3f beam = SpotlightBeamGeometry.beamDirection(facing, rotation, tilt);
 
             this.spotData.getPositionMutable().set(
                     pos.getX() + origin.x,
                     pos.getY() + origin.y,
                     pos.getZ() + origin.z
             );
-            // Veil builds the spotlight cone along the orientation's inverse +Z axis, so the
-            // quaternion must rotate the beam direction *onto* +Z. Doing it the other way
-            // around aims the light opposite to the visible head.
             this.spotData.getOrientationMutable().rotationTo(beam, LOCAL_FORWARD);
             this.spotData.setSize((float) Math.toRadians(spotlight.getSizeDegrees()));
             this.spotData.setDistance(spotlight.getDistance());

@@ -23,11 +23,12 @@ public class OpticalBlockStateProvider extends BlockStateProvider {
 
         getVariantBuilder(ModBlocks.SPOTLIGHT.get()).forAllStates(state -> {
             Direction facing = state.getValue(SpotlightBlock.FACING);
+            int rotation = state.getValue(SpotlightBlock.ROTATION);
             boolean lit = state.getValue(SpotlightBlock.LIT);
             return ConfiguredModel.builder()
                     .modelFile(lit ? spotlightOn : spotlightOff)
-                    .rotationX(SpotlightBlock.modelRotationX(facing))
-                    .rotationY(SpotlightBlock.modelRotationY(facing))
+                    .rotationX(SpotlightBlock.modelRotationX(facing, rotation))
+                    .rotationY(SpotlightBlock.modelRotationY(facing, rotation))
                     .build();
         });
 

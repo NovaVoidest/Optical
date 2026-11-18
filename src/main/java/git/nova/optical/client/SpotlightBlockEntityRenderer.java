@@ -16,10 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/**
- * Renders the movable projector head on top of the static holder, which is drawn by the
- * blockstate model. The head is rotated around its pivot by the angle stored on the block entity.
- */
 public class SpotlightBlockEntityRenderer implements BlockEntityRenderer<SpotlightBlockEntity> {
 
     public static final ModelResourceLocation HEAD_OFF = ModelResourceLocation.standalone(
@@ -42,7 +38,8 @@ public class SpotlightBlockEntityRenderer implements BlockEntityRenderer<Spotlig
                 .getModel(state.getValue(SpotlightBlock.LIT) ? HEAD_ON : HEAD_OFF);
 
         poseStack.pushPose();
-        SpotlightBeamGeometry.applyBlockRotation(poseStack, state.getValue(SpotlightBlock.FACING));
+        SpotlightBeamGeometry.applyBlockRotation(poseStack, state.getValue(SpotlightBlock.FACING),
+                state.getValue(SpotlightBlock.ROTATION));
         SpotlightBeamGeometry.applyHeadTilt(poseStack, blockEntity.getRotationDegrees());
 
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
@@ -62,7 +59,6 @@ public class SpotlightBlockEntityRenderer implements BlockEntityRenderer<Spotlig
 
     @Override
     public AABB getRenderBoundingBox(SpotlightBlockEntity blockEntity) {
-        // The tilted head can poke slightly outside the block at intermediate angles.
         return new AABB(blockEntity.getBlockPos()).inflate(0.5D);
     }
 }

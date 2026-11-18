@@ -13,6 +13,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -26,16 +27,22 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-/**
- * A small point light source that can be toggled with right click or redstone.
- */
 public class LightDiodeBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+
+    private static final VoxelShape SHAPE = Shapes.or(
+            Shapes.box(4.0 / 16.0, 0.0, 4.0 / 16.0, 12.0 / 16.0, 2.0 / 16.0, 12.0 / 16.0),
+            Shapes.box(5.0 / 16.0, 2.0 / 16.0, 5.0 / 16.0, 11.0 / 16.0, 9.05 / 16.0, 11.0 / 16.0),
+            Shapes.box(4.0 / 16.0, 9.05 / 16.0, 4.0 / 16.0, 12.0 / 16.0, 11.05 / 16.0, 12.0 / 16.0),
+            Shapes.box(6.0 / 16.0, 11.05 / 16.0, 7.5 / 16.0, 10.0 / 16.0, 13.05 / 16.0, 8.5 / 16.0));
 
     public LightDiodeBlock(Properties properties) {
         super(properties);
@@ -47,6 +54,11 @@ public class LightDiodeBlock extends Block implements EntityBlock, SimpleWaterlo
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(LIT, WATERLOGGED);
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
     }
 
     @Nullable

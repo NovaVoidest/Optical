@@ -17,13 +17,10 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
-// This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = OpticalMod.MODID, dist = Dist.CLIENT)
-// Mod-bus events (client setup, model registration and renderer registration).
 @EventBusSubscriber(modid = OpticalMod.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class OpticalModClient {
     public OpticalModClient(ModContainer container) {
-        // Allows NeoForge to create a config screen for this mod's configs.
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 

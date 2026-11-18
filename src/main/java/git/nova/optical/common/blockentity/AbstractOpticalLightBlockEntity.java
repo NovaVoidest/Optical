@@ -14,10 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-/**
- * Shared logic for all light-emitting blocks. The complete light is created on the client by
- * {@link ClientLightHooks}; only the small configuration needed to rebuild it is synced here.
- */
 public abstract class AbstractOpticalLightBlockEntity extends BlockEntity {
 
     private boolean manualOn;

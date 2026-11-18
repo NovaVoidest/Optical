@@ -19,13 +19,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 
-/**
- * Client-side state machine for the Optical Key.
- * <p>
- * Left click cycles the selected parameter. Holding right click locks the camera and turns
- * horizontal mouse movement into value changes. The camera lock itself lives in
- * {@code MouseHandlerMixin}; this class receives the raw mouse delta from there.
- */
 @EventBusSubscriber(modid = OpticalMod.MODID, value = Dist.CLIENT)
 public final class OpticalKeyController {
 
@@ -145,15 +138,11 @@ public final class OpticalKeyController {
                 event.setSwingHand(false);
             }
         } else if (event.isUseItem() && adjusting) {
-            // Stop the repeated use-item action while the mouse is being used for adjustment.
             event.setCanceled(true);
             event.setSwingHand(false);
         }
     }
 
-    /**
-     * @return true when the event was consumed by the key.
-     */
     private static boolean trySelectParameter() {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || !isHoldingKey(minecraft.player) || getTargetSpotlight() == null) {
@@ -187,11 +176,6 @@ public final class OpticalKeyController {
         scrollAccumulator = 0.0D;
     }
 
-    /**
-     * Called from the MouseHandler mixin before vanilla turns the player.
-     *
-     * @return true when camera movement must be cancelled.
-     */
     public static boolean handleMouseDelta(double deltaX, double deltaY) {
         if (!adjusting) {
             return false;
@@ -255,7 +239,6 @@ public final class OpticalKeyController {
             }
         }
 
-        // Apply on the client immediately, then let the server validate and persist it.
         spotlight.setClientConfiguration(pendingSize, pendingDistance, pendingRotation);
         PacketDistributor.sendToServer(
                 new AdjustSpotlightPayload(targetPos, pendingSize, pendingDistance, pendingRotation));

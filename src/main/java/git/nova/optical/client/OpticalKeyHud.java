@@ -13,11 +13,6 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import java.util.Locale;
 
-/**
- * Shows the Optical Key readout in the actionbar. The style is kept close to vanilla: plain white
- * values with grey labels, no title and no bold text. The selected value is the only white one,
- * which is enough to show which parameter the mouse will adjust.
- */
 @EventBusSubscriber(modid = OpticalMod.MODID, value = Dist.CLIENT)
 public final class OpticalKeyHud {
 

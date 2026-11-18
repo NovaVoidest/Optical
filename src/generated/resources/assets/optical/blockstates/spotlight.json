@@ -1,104 +1,444 @@
 {
   "variants": {
-    "facing=down,lit=false,waterlogged=false": {
+    "facing=down,lit=false,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder",
       "x": 180
     },
-    "facing=down,lit=false,waterlogged=true": {
+    "facing=down,lit=false,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder",
       "x": 180
     },
-    "facing=down,lit=true,waterlogged=false": {
+    "facing=down,lit=false,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 180,
+      "y": 90
+    },
+    "facing=down,lit=false,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 180,
+      "y": 90
+    },
+    "facing=down,lit=false,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 180,
+      "y": 180
+    },
+    "facing=down,lit=false,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 180,
+      "y": 180
+    },
+    "facing=down,lit=false,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 180,
+      "y": 270
+    },
+    "facing=down,lit=false,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 180,
+      "y": 270
+    },
+    "facing=down,lit=true,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder_on",
       "x": 180
     },
-    "facing=down,lit=true,waterlogged=true": {
+    "facing=down,lit=true,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder_on",
       "x": 180
     },
-    "facing=east,lit=false,waterlogged=false": {
+    "facing=down,lit=true,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 180,
+      "y": 90
+    },
+    "facing=down,lit=true,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 180,
+      "y": 90
+    },
+    "facing=down,lit=true,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 180,
+      "y": 180
+    },
+    "facing=down,lit=true,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 180,
+      "y": 180
+    },
+    "facing=down,lit=true,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 180,
+      "y": 270
+    },
+    "facing=down,lit=true,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 180,
+      "y": 270
+    },
+    "facing=east,lit=false,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder",
       "x": 90,
       "y": 90
     },
-    "facing=east,lit=false,waterlogged=true": {
+    "facing=east,lit=false,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder",
       "x": 90,
       "y": 90
     },
-    "facing=east,lit=true,waterlogged=false": {
+    "facing=east,lit=false,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,lit=false,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,lit=false,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,lit=false,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,lit=false,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,lit=false,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,lit=true,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder_on",
       "x": 90,
       "y": 90
     },
-    "facing=east,lit=true,waterlogged=true": {
+    "facing=east,lit=true,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder_on",
       "x": 90,
       "y": 90
     },
-    "facing=north,lit=false,waterlogged=false": {
+    "facing=east,lit=true,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,lit=true,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,lit=true,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,lit=true,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,lit=true,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,lit=true,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 270
+    },
+    "facing=north,lit=false,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder",
       "x": 90
     },
-    "facing=north,lit=false,waterlogged=true": {
+    "facing=north,lit=false,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder",
       "x": 90
     },
-    "facing=north,lit=true,waterlogged=false": {
+    "facing=north,lit=false,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90
+    },
+    "facing=north,lit=false,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90
+    },
+    "facing=north,lit=false,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,lit=false,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,lit=false,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,lit=false,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,lit=true,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder_on",
       "x": 90
     },
-    "facing=north,lit=true,waterlogged=true": {
+    "facing=north,lit=true,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder_on",
       "x": 90
     },
-    "facing=south,lit=false,waterlogged=false": {
+    "facing=north,lit=true,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90
+    },
+    "facing=north,lit=true,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90
+    },
+    "facing=north,lit=true,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,lit=true,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,lit=true,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,lit=true,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 180
+    },
+    "facing=south,lit=false,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder",
       "x": 270
     },
-    "facing=south,lit=false,waterlogged=true": {
+    "facing=south,lit=false,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder",
       "x": 270
     },
-    "facing=south,lit=true,waterlogged=false": {
+    "facing=south,lit=false,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270
+    },
+    "facing=south,lit=false,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270
+    },
+    "facing=south,lit=false,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=false,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=false,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=false,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=true,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder_on",
       "x": 270
     },
-    "facing=south,lit=true,waterlogged=true": {
+    "facing=south,lit=true,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder_on",
       "x": 270
     },
-    "facing=up,lit=false,waterlogged=false": {
+    "facing=south,lit=true,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270
+    },
+    "facing=south,lit=true,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270
+    },
+    "facing=south,lit=true,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=true,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=true,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,lit=true,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up,lit=false,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder"
     },
-    "facing=up,lit=false,waterlogged=true": {
+    "facing=up,lit=false,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder"
     },
-    "facing=up,lit=true,waterlogged=false": {
+    "facing=up,lit=false,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "y": 270
+    },
+    "facing=up,lit=false,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "y": 270
+    },
+    "facing=up,lit=false,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "y": 180
+    },
+    "facing=up,lit=false,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "y": 180
+    },
+    "facing=up,lit=false,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "y": 90
+    },
+    "facing=up,lit=false,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "y": 90
+    },
+    "facing=up,lit=true,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder_on"
     },
-    "facing=up,lit=true,waterlogged=true": {
+    "facing=up,lit=true,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder_on"
     },
-    "facing=west,lit=false,waterlogged=false": {
+    "facing=up,lit=true,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "y": 270
+    },
+    "facing=up,lit=true,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "y": 270
+    },
+    "facing=up,lit=true,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "y": 180
+    },
+    "facing=up,lit=true,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "y": 180
+    },
+    "facing=up,lit=true,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "y": 90
+    },
+    "facing=up,lit=true,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "y": 90
+    },
+    "facing=west,lit=false,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder",
       "x": 90,
       "y": 270
     },
-    "facing=west,lit=false,waterlogged=true": {
+    "facing=west,lit=false,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder",
       "x": 90,
       "y": 270
     },
-    "facing=west,lit=true,waterlogged=false": {
+    "facing=west,lit=false,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,lit=false,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,lit=false,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,lit=false,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,lit=false,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,lit=false,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,lit=true,rotation=0,waterlogged=false": {
       "model": "optical:block/spotlight_holder_on",
       "x": 90,
       "y": 270
     },
-    "facing=west,lit=true,waterlogged=true": {
+    "facing=west,lit=true,rotation=0,waterlogged=true": {
       "model": "optical:block/spotlight_holder_on",
       "x": 90,
       "y": 270
+    },
+    "facing=west,lit=true,rotation=1,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,lit=true,rotation=1,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,lit=true,rotation=2,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,lit=true,rotation=2,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,lit=true,rotation=3,waterlogged=false": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,lit=true,rotation=3,waterlogged=true": {
+      "model": "optical:block/spotlight_holder_on",
+      "x": 270,
+      "y": 90
     }
   }
 }

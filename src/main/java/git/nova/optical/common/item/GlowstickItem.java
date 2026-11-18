@@ -18,20 +18,12 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-/**
- * A single-use chemical glowstick.
- * <p>
- * Right clicking cracks the stick, which starts a real-time burn. It glows at full strength for
- * one minute and then fades out over thirty seconds. The item itself is never destroyed, but
- * once the fade completes it is spent and can no longer produce light.
- */
 public class GlowstickItem extends Item {
 
     public static final long GLOW_TIME_MS = 60_000L;
     public static final long FADE_TIME_MS = 30_000L;
     public static final long LIFETIME_MS = GLOW_TIME_MS + FADE_TIME_MS;
 
-    /** Purple, as requested, instead of the usual green-to-red durability colours. */
     public static final int BAR_COLOR = 0x9B4DFF;
 
     public GlowstickItem(Properties properties) {
@@ -42,9 +34,6 @@ public class GlowstickItem extends Item {
         return stack.has(ModDataComponents.GLOWSTICK_LIT_AT.get());
     }
 
-    /**
-     * @return milliseconds since the stick was cracked, or {@code -1} while it is intact.
-     */
     public static long getElapsedMs(ItemStack stack) {
         Long litAt = stack.get(ModDataComponents.GLOWSTICK_LIT_AT.get());
         return litAt == null ? -1L : Math.max(0L, System.currentTimeMillis() - litAt);
@@ -59,9 +48,6 @@ public class GlowstickItem extends Item {
         return getElapsedMs(stack) >= LIFETIME_MS;
     }
 
-    /**
-     * @return brightness multiplier, 1 while glowing and linearly fading to 0 over the last 30s.
-     */
     public static float getGlowStrength(ItemStack stack) {
         long elapsed = getElapsedMs(stack);
         if (elapsed < 0L || elapsed >= LIFETIME_MS) {
@@ -73,9 +59,6 @@ public class GlowstickItem extends Item {
         return 1.0F - (float) (elapsed - GLOW_TIME_MS) / (float) FADE_TIME_MS;
     }
 
-    /**
-     * @return remaining lifetime as a 1..0 fraction, used by the durability-style bar.
-     */
     public static float getLifeFraction(ItemStack stack) {
         long elapsed = getElapsedMs(stack);
         if (elapsed < 0L) {
@@ -140,20 +123,10 @@ public class GlowstickItem extends Item {
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
                                 TooltipFlag flag) {
         long elapsed = getElapsedMs(stack);
-        if (elapsed < 0L) {
-            tooltip.add(Component.translatable("tooltip.optical.glowstick.intact")
-                    .withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.translatable("tooltip.optical.glowstick.hint")
-                    .withStyle(ChatFormatting.DARK_GRAY));
-        } else if (elapsed < LIFETIME_MS) {
+        if (elapsed >= 0L && elapsed < LIFETIME_MS) {
             long remainingSeconds = (LIFETIME_MS - elapsed + 999L) / 1000L;
             tooltip.add(Component.translatable("tooltip.optical.glowstick.lit", remainingSeconds)
                     .withStyle(ChatFormatting.GREEN));
-            tooltip.add(Component.translatable("tooltip.optical.glowstick.burns")
-                    .withStyle(ChatFormatting.DARK_GRAY));
-        } else {
-            tooltip.add(Component.translatable("tooltip.optical.glowstick.spent")
-                    .withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 }

@@ -25,7 +25,6 @@ public class OpticalDataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
-        // Server-side data (Recipes, Loot Tables, Tags)
         generator.addProvider(event.includeServer(), new OpticalRecipeProvider(packOutput, lookupProvider));
         generator.addProvider(event.includeServer(), new LootTableProvider(
                 packOutput,
@@ -43,7 +42,6 @@ public class OpticalDataGenerators {
                 new OpticalItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), existingFileHelper)
         );
 
-        // Client-side assets (Blockstates, Models, Lang)
         generator.addProvider(event.includeClient(), new OpticalBlockStateProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new OpticalItemModelProvider(packOutput, existingFileHelper));
     }

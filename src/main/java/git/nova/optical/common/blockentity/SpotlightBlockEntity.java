@@ -41,9 +41,6 @@ public class SpotlightBlockEntity extends AbstractOpticalLightBlockEntity {
         return this.rotationDegrees;
     }
 
-    /**
-     * Server-side configuration change, sent by the Optical Key.
-     */
     public void setConfiguration(float sizeDegrees, float distance, float rotationDegrees) {
         float clampedSize = Mth.clamp(sizeDegrees, MIN_SIZE, MAX_SIZE);
         float clampedDistance = Mth.clamp(distance, MIN_DISTANCE, MAX_DISTANCE);
@@ -60,10 +57,6 @@ public class SpotlightBlockEntity extends AbstractOpticalLightBlockEntity {
         this.sync();
     }
 
-    /**
-     * Immediate client-side update so the light and the head react while the mouse is moving.
-     * The authoritative values still arrive from the server.
-     */
     public void setClientConfiguration(float sizeDegrees, float distance, float rotationDegrees) {
         this.sizeDegrees = Mth.clamp(sizeDegrees, MIN_SIZE, MAX_SIZE);
         this.distance = Mth.clamp(distance, MIN_DISTANCE, MAX_DISTANCE);

@@ -2,7 +2,6 @@ package git.nova.optical.common.block;
 
 import git.nova.optical.common.blockentity.AbstractOpticalLightBlockEntity;
 import git.nova.optical.common.blockentity.SpotlightBlockEntity;
-import git.nova.optical.init.blocks.ModBlockEntities;
 import git.nova.optical.init.items.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,6 +13,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -25,34 +25,42 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-/**
- * A directional light block. Its {@link #FACING} property points away from the block it is
- * attached to, so the base of the projector always rests against that support. The head can
- * then be tilted with the Optical Key to aim the beam.
- */
 public class SpotlightBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
+
+    private static final VoxelShape[] HOLDER_SHAPES = createHolderShapes();
 
     public SpotlightBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.UP)
+                .setValue(ROTATION, 0)
                 .setValue(LIT, false)
                 .setValue(WATERLOGGED, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, LIT, WATERLOGGED);
+        builder.add(FACING, ROTATION, LIT, WATERLOGGED);
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return HOLDER_SHAPES[state.getValue(FACING).ordinal() * 4 + state.getValue(ROTATION)];
     }
 
     @Nullable
@@ -63,6 +71,7 @@ public class SpotlightBlock extends Block implements EntityBlock, SimpleWaterlog
         FluidState fluidState = context.getLevel().getFluidState(pos);
         return this.defaultBlockState()
                 .setValue(FACING, facing)
+                .setValue(ROTATION, placementRotation(context, facing))
                 .setValue(LIT, context.getLevel().hasNeighborSignal(pos))
                 .setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
@@ -97,8 +106,6 @@ public class SpotlightBlock extends Block implements EntityBlock, SimpleWaterlog
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                               Player player, InteractionHand hand, BlockHitResult hitResult) {
-        // The Optical Key handles its own right-click interaction. Do not let the block toggle
-        // when the key is held.
         if (stack.is(ModItems.OPTICAL_KEY.get())) {
             return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
@@ -129,27 +136,115 @@ public class SpotlightBlock extends Block implements EntityBlock, SimpleWaterlog
         return new SpotlightBlockEntity(pos, state);
     }
 
-    /**
-     * Blockstate rotations for the projector. The model is authored with its base at the bottom
-     * and its head pointing north. Rotating the model's local +Y onto {@link #FACING} keeps the
-     * base flat against the face the spotlight was placed on, while the head can then be tilted
-     * by the block entity.
-     */
-    public static int modelRotationX(Direction facing) {
+    private static int placementRotation(BlockPlaceContext context, Direction facing) {
+        if (!facing.getAxis().isVertical()) {
+            return 0;
+        }
+        int roll = switch (context.getHorizontalDirection()) {
+            case SOUTH -> 2;
+            case WEST -> 1;
+            case NORTH -> 0;
+            case EAST -> 3;
+            default -> 0;
+        };
+        return facing == Direction.DOWN ? (roll + 2) & 3 : roll;
+    }
+
+    public static int modelRotationX(Direction facing, int rotation) {
         return switch (facing) {
             case UP -> 0;
             case DOWN -> 180;
-            case NORTH -> 90;
-            case SOUTH -> 270;
-            case EAST, WEST -> 90;
+            case SOUTH -> effectiveRoll(facing, rotation) == 0 ? 270 : 90;
+            case NORTH, EAST, WEST -> effectiveRoll(facing, rotation) == 0 ? 90 : 270;
         };
     }
 
-    public static int modelRotationY(Direction facing) {
+    public static int modelRotationY(Direction facing, int rotation) {
         return switch (facing) {
-            case EAST -> 90;
-            case WEST -> 270;
-            default -> 0;
+            case UP -> (360 - rotation * 90) % 360;
+            case DOWN -> (rotation * 90) % 360;
+            case NORTH, SOUTH -> effectiveRoll(facing, rotation) == 0 ? 0 : 180;
+            case EAST -> effectiveRoll(facing, rotation) == 0 ? 90 : 270;
+            case WEST -> effectiveRoll(facing, rotation) == 0 ? 270 : 90;
         };
+    }
+
+    public static int effectiveRoll(Direction facing, int rotation) {
+        return facing.getAxis().isVertical() ? rotation & 3 : rotation & 2;
+    }
+
+    private static VoxelShape[] createHolderShapes() {
+        VoxelShape[] shapes = new VoxelShape[Direction.values().length * 4];
+        for (Direction facing : Direction.values()) {
+            for (int rotation = 0; rotation < 4; rotation++) {
+                shapes[facing.ordinal() * 4 + rotation] = Shapes.or(
+                        rotateBox(1, 0, 2, 15, 2, 14, facing, rotation),
+                        rotateBox(1, 2, 6, 3, 12, 10, facing, rotation),
+                        rotateBox(13, 2, 6, 15, 12, 10, facing, rotation));
+            }
+        }
+        return shapes;
+    }
+
+    private static VoxelShape rotateBox(double minX, double minY, double minZ,
+                                        double maxX, double maxY, double maxZ,
+                                        Direction facing, int rotation) {
+        double[] min = rotatePoint(minX, minY, minZ, facing, rotation);
+        double[] max = rotatePoint(maxX, maxY, maxZ, facing, rotation);
+        return Shapes.box(
+                Math.min(min[0], max[0]) / 16.0,
+                Math.min(min[1], max[1]) / 16.0,
+                Math.min(min[2], max[2]) / 16.0,
+                Math.max(min[0], max[0]) / 16.0,
+                Math.max(min[1], max[1]) / 16.0,
+                Math.max(min[2], max[2]) / 16.0);
+    }
+
+    private static double[] rotatePoint(double x, double y, double z, Direction facing, int rotation) {
+        int rotationX = modelRotationX(facing, rotation);
+        int rotationY = modelRotationY(facing, rotation);
+        double centeredX = x - 8.0;
+        double centeredY = y - 8.0;
+        double centeredZ = z - 8.0;
+
+        double rotatedY;
+        double rotatedZ;
+        switch (rotationX) {
+            case 90 -> {
+                rotatedY = centeredZ;
+                rotatedZ = -centeredY;
+            }
+            case 180 -> {
+                rotatedY = -centeredY;
+                rotatedZ = -centeredZ;
+            }
+            case 270 -> {
+                rotatedY = -centeredZ;
+                rotatedZ = centeredY;
+            }
+            default -> {
+                rotatedY = centeredY;
+                rotatedZ = centeredZ;
+            }
+        }
+
+        double rotatedX;
+        switch (rotationY) {
+            case 90 -> {
+                rotatedX = -rotatedZ;
+                rotatedZ = centeredX;
+            }
+            case 180 -> {
+                rotatedX = -centeredX;
+                rotatedZ = -rotatedZ;
+            }
+            case 270 -> {
+                rotatedX = rotatedZ;
+                rotatedZ = -centeredX;
+            }
+            default -> rotatedX = centeredX;
+        }
+
+        return new double[]{rotatedX + 8.0, rotatedY + 8.0, rotatedZ + 8.0};
     }
 }

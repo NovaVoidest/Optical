@@ -14,9 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/**
- * Sent by the Optical Key whenever the player changes a spotlight value.
- */
 public record AdjustSpotlightPayload(BlockPos pos, float sizeDegrees, float distance, float rotationDegrees)
         implements CustomPacketPayload {
 
