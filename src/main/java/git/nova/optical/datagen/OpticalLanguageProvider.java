@@ -11,7 +11,6 @@ public class OpticalLanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        // Example:
         // add(ModItems.LENS.get(), "Optical Lens");
         // add(ModBlocks.OPTICAL_GLASS.get(), "Optical Glass");
         // add("itemGroup.optical", "Optical");

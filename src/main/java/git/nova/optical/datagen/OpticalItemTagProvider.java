@@ -17,7 +17,6 @@ public class OpticalItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        // Example:
         // tag(ItemTags.BEACON_PAYMENT_ITEMS).add(ModItems.LENS.get());
     }
 }

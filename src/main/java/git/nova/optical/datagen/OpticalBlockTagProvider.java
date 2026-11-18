@@ -16,7 +16,6 @@ public class OpticalBlockTagProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        // Example:
         // tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.OPTICAL_GLASS.get());
         // tag(BlockTags.NEEDS_IRON_TOOL).add(ModBlocks.OPTICAL_GLASS.get());
     }

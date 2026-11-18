@@ -11,7 +11,6 @@ public class OpticalBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        // Example for a standard 6-sided cube block:
         // simpleBlockWithItem(ModBlocks.OPTICAL_GLASS.get(), cubeAll(ModBlocks.OPTICAL_GLASS.get()));
     }
 }

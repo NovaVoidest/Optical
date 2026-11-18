@@ -17,7 +17,6 @@ public class OpticalBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-
         // dropSelf(ModBlocks.OPTICAL_GLASS.get());
     }
 
