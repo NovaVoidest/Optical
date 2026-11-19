@@ -1,6 +1,7 @@
 package git.nova.optical.datagen;
 
 import git.nova.optical.OpticalMod;
+import git.nova.optical.common.block.LightDiodeBlock;
 import git.nova.optical.common.block.SpotlightBlock;
 import git.nova.optical.init.blocks.ModBlocks;
 import net.minecraft.core.Direction;
@@ -32,9 +33,10 @@ public class OpticalBlockStateProvider extends BlockStateProvider {
                     .build();
         });
 
-        ModelFile diode = models().getExistingFile(modLoc("block/light_diode"));
+        ModelFile diodeOn = models().getExistingFile(modLoc("block/light_diode"));
+        ModelFile diodeOff = models().getExistingFile(modLoc("block/light_diode_off"));
         getVariantBuilder(ModBlocks.LIGHT_DIODE.get()).forAllStates(state -> ConfiguredModel.builder()
-                .modelFile(diode)
+                .modelFile(state.getValue(LightDiodeBlock.LIT) ? diodeOn : diodeOff)
                 .build());
     }
 }

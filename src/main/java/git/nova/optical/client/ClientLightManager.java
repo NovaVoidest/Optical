@@ -12,6 +12,7 @@ import git.nova.optical.common.block.SpotlightBlock;
 import git.nova.optical.common.blockentity.LightDiodeBlockEntity;
 import git.nova.optical.common.blockentity.SpotlightBlockEntity;
 import git.nova.optical.common.item.GlowstickItem;
+import git.nova.optical.common.light.LightColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -26,6 +27,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import org.joml.Vector3f;
 
@@ -105,8 +107,20 @@ public final class ClientLightManager {
             }
             entry.getValue().update(blockEntity, renderer);
         }
+    }
 
-        updateGlowstick(minecraft, renderer);
+    @SubscribeEvent
+    public static void onRenderFrame(RenderFrameEvent.Pre event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null) {
+            return;
+        }
+        LightRenderer renderer = lightRenderer();
+        if (renderer == null) {
+            return;
+        }
+        float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
+        updateGlowstick(minecraft, renderer, partialTick);
     }
 
     @SubscribeEvent
@@ -129,7 +143,7 @@ public final class ClientLightManager {
         freeGlowstick();
     }
 
-    private static void updateGlowstick(Minecraft minecraft, LightRenderer renderer) {
+    private static void updateGlowstick(Minecraft minecraft, LightRenderer renderer, float partialTick) {
         LocalPlayer player = minecraft.player;
         ItemStack stack = player == null ? ItemStack.EMPTY : findLitGlowstick(player);
         float strength = stack.isEmpty() ? 0.0F : GlowstickItem.getGlowStrength(stack);
@@ -146,9 +160,10 @@ public final class ClientLightManager {
         }
 
         long gameTime = minecraft.level != null ? minecraft.level.getGameTime() : 0L;
-        float flicker = flicker(gameTime, GLOWSTICK_FLICKER_AMOUNT);
+        float flicker = flicker(gameTime + partialTick, GLOWSTICK_FLICKER_AMOUNT);
 
-        glowstickLight.setPosition(player.getX(), player.getY() + 1.05D, player.getZ());
+        Vec3 position = player.getPosition(partialTick);
+        glowstickLight.setPosition(position.x, position.y + 1.05D, position.z);
         glowstickLight.setBrightness(GLOWSTICK_BRIGHTNESS * strength * flicker);
         glowstickLight.setColor(GLOWSTICK_RED, GLOWSTICK_GREEN, GLOWSTICK_BLUE);
         glowstickLight.setRadius(GLOWSTICK_RADIUS);
@@ -168,7 +183,7 @@ public final class ClientLightManager {
         return ItemStack.EMPTY;
     }
 
-    private static float flicker(long gameTime, float amount) {
+    private static float flicker(float gameTime, float amount) {
         double t = gameTime * 0.37D;
         double noise = Math.sin(t) * 0.5D
                 + Math.sin(t * 2.13D + 1.7D) * 0.3D
@@ -238,8 +253,13 @@ public final class ClientLightManager {
             this.spotData.getOrientationMutable().rotationTo(beam, LOCAL_FORWARD);
             this.spotData.setSize((float) Math.toRadians(spotlight.getSizeDegrees()));
             this.spotData.setDistance(spotlight.getDistance());
-            this.spotData.setBrightness(SPOTLIGHT_BRIGHTNESS);
-            this.spotData.setColor(1.0F, 1.0F, 1.0F);
+            this.spotData.setBrightness(SPOTLIGHT_BRIGHTNESS * spotlight.getBrightness());
+            int tint = spotlight.getTint();
+            if (tint == LightColor.NONE) {
+                this.spotData.setColor(1.0F, 1.0F, 1.0F);
+            } else {
+                this.spotData.setColor(LightColor.red(tint), LightColor.green(tint), LightColor.blue(tint));
+            }
             this.spotData.setAngle(SPOTLIGHT_ANGLE_RADIANS);
             this.spotData.setOcclusionEnabled(true);
             this.spotData.setInscatteringStrength(0.0F);
@@ -264,7 +284,12 @@ public final class ClientLightManager {
             Vec3 center = Vec3.atCenterOf(diode.getBlockPos());
             this.pointData.setPosition(center.x, center.y, center.z);
             this.pointData.setBrightness(DIODE_BRIGHTNESS * flicker);
-            this.pointData.setColor(DIODE_RED, DIODE_GREEN, DIODE_BLUE);
+            int tint = diode.getTint();
+            if (tint == LightColor.NONE) {
+                this.pointData.setColor(DIODE_RED, DIODE_GREEN, DIODE_BLUE);
+            } else {
+                this.pointData.setColor(LightColor.red(tint), LightColor.green(tint), LightColor.blue(tint));
+            }
             this.pointData.setRadius(DIODE_RADIUS);
             this.pointData.setOcclusionEnabled(true);
             this.pointData.setInscatteringStrength(DIODE_INSCATTERING);

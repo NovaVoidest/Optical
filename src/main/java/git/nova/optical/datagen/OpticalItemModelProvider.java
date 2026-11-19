@@ -14,7 +14,6 @@ public class OpticalItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         withExistingParent("spotlight", modLoc("block/spotlight"));
-        withExistingParent("light_diode", modLoc("block/light_diode"));
 
     }
 }

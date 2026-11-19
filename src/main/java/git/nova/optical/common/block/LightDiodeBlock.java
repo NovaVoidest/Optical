@@ -2,6 +2,8 @@ package git.nova.optical.common.block;
 
 import git.nova.optical.common.blockentity.AbstractOpticalLightBlockEntity;
 import git.nova.optical.common.blockentity.LightDiodeBlockEntity;
+import git.nova.optical.common.light.LightColor;
+import git.nova.optical.common.light.LightTintInteraction;
 import git.nova.optical.init.items.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -41,8 +43,7 @@ public class LightDiodeBlock extends Block implements EntityBlock, SimpleWaterlo
     private static final VoxelShape SHAPE = Shapes.or(
             Shapes.box(4.0 / 16.0, 0.0, 4.0 / 16.0, 12.0 / 16.0, 2.0 / 16.0, 12.0 / 16.0),
             Shapes.box(5.0 / 16.0, 2.0 / 16.0, 5.0 / 16.0, 11.0 / 16.0, 9.05 / 16.0, 11.0 / 16.0),
-            Shapes.box(4.0 / 16.0, 9.05 / 16.0, 4.0 / 16.0, 12.0 / 16.0, 11.05 / 16.0, 12.0 / 16.0),
-            Shapes.box(6.0 / 16.0, 11.05 / 16.0, 7.5 / 16.0, 10.0 / 16.0, 13.05 / 16.0, 8.5 / 16.0));
+            Shapes.box(4.0 / 16.0, 9.05 / 16.0, 4.0 / 16.0, 12.0 / 16.0, 11.05 / 16.0, 12.0 / 16.0));
 
     public LightDiodeBlock(Properties properties) {
         super(properties);
@@ -100,6 +101,10 @@ public class LightDiodeBlock extends Block implements EntityBlock, SimpleWaterlo
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                               Player player, InteractionHand hand, BlockHitResult hitResult) {
+        ItemInteractionResult pane = LightTintInteraction.applyPane(level, pos, player, hand);
+        if (pane != null) {
+            return pane;
+        }
         if (stack.is(ModItems.OPTICAL_KEY.get())) {
             return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
@@ -111,6 +116,10 @@ public class LightDiodeBlock extends Block implements EntityBlock, SimpleWaterlo
                                                BlockHitResult hitResult) {
         if (!(level.getBlockEntity(pos) instanceof LightDiodeBlockEntity blockEntity)) {
             return InteractionResult.PASS;
+        }
+
+        if (player.isShiftKeyDown() && blockEntity.getTint() != LightColor.NONE) {
+            return LightTintInteraction.removePane(level, pos);
         }
 
         if (!level.isClientSide) {

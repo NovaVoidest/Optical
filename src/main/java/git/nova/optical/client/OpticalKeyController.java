@@ -1,6 +1,7 @@
 package git.nova.optical.client;
 
 import git.nova.optical.OpticalMod;
+import git.nova.optical.common.blockentity.AbstractOpticalLightBlockEntity;
 import git.nova.optical.common.blockentity.SpotlightBlockEntity;
 import git.nova.optical.init.items.ModItems;
 import git.nova.optical.network.AdjustSpotlightPayload;
@@ -25,7 +26,8 @@ public final class OpticalKeyController {
     public enum Parameter {
         SIZE("hud.optical.size"),
         DISTANCE("hud.optical.distance"),
-        ROTATION("hud.optical.rotation");
+        ROTATION("hud.optical.rotation"),
+        BRIGHTNESS("hud.optical.brightness");
 
         private final String translationKey;
 
@@ -42,15 +44,20 @@ public final class OpticalKeyController {
     private static final float SIZE_STEP = 1.0F;
     private static final float DISTANCE_STEP = 1.0F;
     private static final float ROTATION_STEP = 1.0F;
+    private static final float BRIGHTNESS_STEP = 0.05F;
     private static final float FINE_MULTIPLIER = 0.1F;
+    private static final int SELECT_COOLDOWN_TICKS = 4;
 
     private static Parameter selected = Parameter.SIZE;
     private static boolean adjusting;
+    private static boolean attackConsumed;
+    private static int selectCooldown;
     @Nullable
     private static BlockPos targetPos;
     private static float pendingSize = SpotlightBlockEntity.DEFAULT_SIZE;
     private static float pendingDistance = SpotlightBlockEntity.DEFAULT_DISTANCE;
     private static float pendingRotation = SpotlightBlockEntity.DEFAULT_ROTATION;
+    private static float pendingBrightness = SpotlightBlockEntity.DEFAULT_BRIGHTNESS;
     private static double scrollAccumulator;
 
     private OpticalKeyController() {
@@ -76,6 +83,10 @@ public final class OpticalKeyController {
         return pendingRotation;
     }
 
+    public static float getPendingBrightness() {
+        return pendingBrightness;
+    }
+
     public static boolean isHoldingKey(@Nullable Player player) {
         return player != null
                 && (player.getMainHandItem().is(ModItems.OPTICAL_KEY.get())
@@ -96,21 +107,31 @@ public final class OpticalKeyController {
     }
 
     @Nullable
-    public static SpotlightBlockEntity getHudTarget() {
+    public static AbstractOpticalLightBlockEntity getHudLight() {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level == null) {
             return null;
         }
         if (adjusting && targetPos != null
-                && minecraft.level.getBlockEntity(targetPos) instanceof SpotlightBlockEntity spotlight) {
-            return spotlight;
+                && minecraft.level.getBlockEntity(targetPos) instanceof AbstractOpticalLightBlockEntity light) {
+            return light;
         }
-        return getTargetSpotlight();
+        if (minecraft.hitResult instanceof BlockHitResult hitResult
+                && minecraft.level.getBlockEntity(hitResult.getBlockPos()) instanceof AbstractOpticalLightBlockEntity light) {
+            return light;
+        }
+        return null;
     }
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
+        if (selectCooldown > 0) {
+            selectCooldown--;
+        }
+        if (!minecraft.options.keyAttack.isDown()) {
+            attackConsumed = false;
+        }
         if (minecraft.player == null || minecraft.level == null || !isHoldingKey(minecraft.player)) {
             stopAdjusting();
             return;
@@ -133,9 +154,16 @@ public final class OpticalKeyController {
     @SubscribeEvent
     public static void onInteraction(InputEvent.InteractionKeyMappingTriggered event) {
         if (event.isAttack()) {
-            if (trySelectParameter()) {
+            boolean targeting = getTargetSpotlight() != null;
+            if (targeting) {
                 event.setCanceled(true);
                 event.setSwingHand(false);
+            }
+            if (!attackConsumed) {
+                attackConsumed = true;
+                if (targeting && selectCooldown == 0) {
+                    selectNextParameter();
+                }
             }
         } else if (event.isUseItem() && adjusting) {
             event.setCanceled(true);
@@ -143,22 +171,23 @@ public final class OpticalKeyController {
         }
     }
 
-    private static boolean trySelectParameter() {
+    private static void selectNextParameter() {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player == null || !isHoldingKey(minecraft.player) || getTargetSpotlight() == null) {
-            return false;
+        if (minecraft.player == null || minecraft.level == null || !isHoldingKey(minecraft.player)) {
+            return;
         }
 
         Parameter[] values = Parameter.values();
         selected = values[(selected.ordinal() + 1) % values.length];
+        selectCooldown = SELECT_COOLDOWN_TICKS;
+        scrollAccumulator = 0.0D;
         if (adjusting && targetPos != null
-                && minecraft.level != null
                 && minecraft.level.getBlockEntity(targetPos) instanceof SpotlightBlockEntity spotlight) {
             pendingSize = spotlight.getSizeDegrees();
             pendingDistance = spotlight.getDistance();
             pendingRotation = spotlight.getRotationDegrees();
+            pendingBrightness = spotlight.getBrightness();
         }
-        return true;
     }
 
     private static void startAdjusting(SpotlightBlockEntity spotlight) {
@@ -167,6 +196,7 @@ public final class OpticalKeyController {
         pendingSize = spotlight.getSizeDegrees();
         pendingDistance = spotlight.getDistance();
         pendingRotation = spotlight.getRotationDegrees();
+        pendingBrightness = spotlight.getBrightness();
         scrollAccumulator = 0.0D;
     }
 
@@ -237,10 +267,21 @@ public final class OpticalKeyController {
                 }
                 pendingRotation = next;
             }
+            case BRIGHTNESS -> {
+                float next = Mth.clamp(
+                        pendingBrightness + steps * BRIGHTNESS_STEP * fine,
+                        SpotlightBlockEntity.MIN_BRIGHTNESS,
+                        SpotlightBlockEntity.MAX_BRIGHTNESS
+                );
+                if (next == pendingBrightness) {
+                    return;
+                }
+                pendingBrightness = next;
+            }
         }
 
-        spotlight.setClientConfiguration(pendingSize, pendingDistance, pendingRotation);
+        spotlight.setClientConfiguration(pendingSize, pendingDistance, pendingRotation, pendingBrightness);
         PacketDistributor.sendToServer(
-                new AdjustSpotlightPayload(targetPos, pendingSize, pendingDistance, pendingRotation));
+                new AdjustSpotlightPayload(targetPos, pendingSize, pendingDistance, pendingRotation, pendingBrightness));
     }
 }

@@ -1,10 +1,10 @@
 {
   "variants": {
     "lit=false,waterlogged=false": {
-      "model": "optical:block/light_diode"
+      "model": "optical:block/light_diode_off"
     },
     "lit=false,waterlogged=true": {
-      "model": "optical:block/light_diode"
+      "model": "optical:block/light_diode_off"
     },
     "lit=true,waterlogged=false": {
       "model": "optical:block/light_diode"

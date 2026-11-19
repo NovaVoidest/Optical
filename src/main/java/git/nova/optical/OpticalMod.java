@@ -1,6 +1,7 @@
 package git.nova.optical;
 
 import git.nova.optical.init.ModDataComponents;
+import git.nova.optical.init.ModSounds;
 import git.nova.optical.init.blocks.ModBlockEntities;
 import git.nova.optical.init.blocks.ModBlocks;
 import git.nova.optical.init.creativetabs.CreativeTabIntegration;
@@ -25,6 +26,7 @@ public class OpticalMod {
 
     public OpticalMod(IEventBus modEventBus, ModContainer modContainer) {
         ModDataComponents.register(modEventBus);
+        ModSounds.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);

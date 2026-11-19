@@ -14,8 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record AdjustSpotlightPayload(BlockPos pos, float sizeDegrees, float distance, float rotationDegrees)
-        implements CustomPacketPayload {
+public record AdjustSpotlightPayload(BlockPos pos, float sizeDegrees, float distance, float rotationDegrees,
+                                     float brightness) implements CustomPacketPayload {
 
     public static final Type<AdjustSpotlightPayload> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(OpticalMod.MODID, "adjust_spotlight"));
@@ -26,6 +26,7 @@ public record AdjustSpotlightPayload(BlockPos pos, float sizeDegrees, float dist
                     ByteBufCodecs.FLOAT, AdjustSpotlightPayload::sizeDegrees,
                     ByteBufCodecs.FLOAT, AdjustSpotlightPayload::distance,
                     ByteBufCodecs.FLOAT, AdjustSpotlightPayload::rotationDegrees,
+                    ByteBufCodecs.FLOAT, AdjustSpotlightPayload::brightness,
                     AdjustSpotlightPayload::new
             );
 
@@ -50,7 +51,8 @@ public record AdjustSpotlightPayload(BlockPos pos, float sizeDegrees, float dist
         }
 
         if (player.level().getBlockEntity(payload.pos()) instanceof SpotlightBlockEntity spotlight) {
-            spotlight.setConfiguration(payload.sizeDegrees(), payload.distance(), payload.rotationDegrees());
+            spotlight.setConfiguration(payload.sizeDegrees(), payload.distance(), payload.rotationDegrees(),
+                    payload.brightness());
         }
     }
 }

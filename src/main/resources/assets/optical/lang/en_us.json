@@ -9,5 +9,10 @@
 
   "hud.optical.size": "Size",
   "hud.optical.distance": "Distance",
-  "hud.optical.rotation": "Rotation"
+  "hud.optical.rotation": "Rotation",
+  "hud.optical.brightness": "Brightness",
+  "hud.optical.color": "Color",
+  "hud.optical.color.none": "White",
+
+  "subtitles.optical.spotlight_on": "Spotlight turns on"
 }

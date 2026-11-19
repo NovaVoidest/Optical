@@ -2,6 +2,9 @@ package git.nova.optical.common.block;
 
 import git.nova.optical.common.blockentity.AbstractOpticalLightBlockEntity;
 import git.nova.optical.common.blockentity.SpotlightBlockEntity;
+import git.nova.optical.common.light.LightColor;
+import git.nova.optical.common.light.LightTintInteraction;
+import git.nova.optical.init.ModSounds;
 import git.nova.optical.init.items.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,7 +45,7 @@ public class SpotlightBlock extends Block implements EntityBlock, SimpleWaterlog
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 3);
 
-    private static final VoxelShape[] HOLDER_SHAPES = createHolderShapes();
+    private static final VoxelShape[] SHAPES = createShapes();
 
     public SpotlightBlock(Properties properties) {
         super(properties);
@@ -60,7 +63,7 @@ public class SpotlightBlock extends Block implements EntityBlock, SimpleWaterlog
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return HOLDER_SHAPES[state.getValue(FACING).ordinal() * 4 + state.getValue(ROTATION)];
+        return SHAPES[state.getValue(FACING).ordinal() * 4 + state.getValue(ROTATION)];
     }
 
     @Nullable
@@ -100,12 +103,19 @@ public class SpotlightBlock extends Block implements EntityBlock, SimpleWaterlog
         boolean lit = manual || level.hasNeighborSignal(pos);
         if (state.getValue(LIT) != lit) {
             level.setBlock(pos, state.setValue(LIT, lit), Block.UPDATE_ALL);
+            if (lit) {
+                level.playSound(null, pos, ModSounds.SPOTLIGHT_ON.get(), SoundSource.BLOCKS, 0.7F, 1.0F);
+            }
         }
     }
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                               Player player, InteractionHand hand, BlockHitResult hitResult) {
+        ItemInteractionResult pane = LightTintInteraction.applyPane(level, pos, player, hand);
+        if (pane != null) {
+            return pane;
+        }
         if (stack.is(ModItems.OPTICAL_KEY.get())) {
             return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
@@ -119,12 +129,17 @@ public class SpotlightBlock extends Block implements EntityBlock, SimpleWaterlog
             return InteractionResult.PASS;
         }
 
+        if (player.isShiftKeyDown() && blockEntity.getTint() != LightColor.NONE) {
+            return LightTintInteraction.removePane(level, pos);
+        }
+
         if (!level.isClientSide) {
             boolean manual = !blockEntity.isManualOn();
             blockEntity.setManualOn(manual);
             boolean lit = manual || level.hasNeighborSignal(pos);
             level.setBlock(pos, state.setValue(LIT, lit), Block.UPDATE_ALL);
-            level.playSound(null, pos, lit ? SoundEvents.COPPER_BULB_TURN_ON : SoundEvents.COPPER_BULB_TURN_OFF,
+            level.playSound(null, pos,
+                    lit ? ModSounds.SPOTLIGHT_ON.get() : SoundEvents.COPPER_BULB_TURN_OFF,
                     SoundSource.BLOCKS, 0.7F, 1.2F);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
@@ -173,14 +188,11 @@ public class SpotlightBlock extends Block implements EntityBlock, SimpleWaterlog
         return facing.getAxis().isVertical() ? rotation & 3 : rotation & 2;
     }
 
-    private static VoxelShape[] createHolderShapes() {
+    private static VoxelShape[] createShapes() {
         VoxelShape[] shapes = new VoxelShape[Direction.values().length * 4];
         for (Direction facing : Direction.values()) {
             for (int rotation = 0; rotation < 4; rotation++) {
-                shapes[facing.ordinal() * 4 + rotation] = Shapes.or(
-                        rotateBox(1, 0, 2, 15, 2, 14, facing, rotation),
-                        rotateBox(1, 2, 6, 3, 12, 10, facing, rotation),
-                        rotateBox(13, 2, 6, 15, 12, 10, facing, rotation));
+                shapes[facing.ordinal() * 4 + rotation] = rotateBox(1, 0, 2, 15, 14, 14, facing, rotation);
             }
         }
         return shapes;
