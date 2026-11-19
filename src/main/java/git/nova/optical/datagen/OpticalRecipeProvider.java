@@ -10,6 +10,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
 import java.util.concurrent.CompletableFuture;
@@ -48,9 +49,30 @@ public class OpticalRecipeProvider extends RecipeProvider implements IConditionB
                 .save(recipeOutput);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.GLOWSTICK.get())
-                .requires(Items.STICK)
-                .requires(Items.GLOWSTONE_DUST)
-                .unlockedBy("has_glowstone", has(Items.GLOWSTONE_DUST))
+                .requires(Items.GLOW_INK_SAC)
+                .requires(Tags.Items.GLASS_PANES)
+                .unlockedBy("has_glow_ink_sac", has(Items.GLOW_INK_SAC))
+                .save(recipeOutput);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.GLOWSTICK_BLUE.get())
+                .requires(Items.GLOW_INK_SAC)
+                .requires(Tags.Items.GLASS_PANES)
+                .requires(Items.BLUE_DYE)
+                .unlockedBy("has_glow_ink_sac", has(Items.GLOW_INK_SAC))
+                .save(recipeOutput);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.GLOWSTICK_PURPLE.get())
+                .requires(Items.GLOW_INK_SAC)
+                .requires(Tags.Items.GLASS_PANES)
+                .requires(Items.PURPLE_DYE)
+                .unlockedBy("has_glow_ink_sac", has(Items.GLOW_INK_SAC))
+                .save(recipeOutput);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.GLOWSTICK_GREEN.get())
+                .requires(Items.GLOW_INK_SAC)
+                .requires(Tags.Items.GLASS_PANES)
+                .requires(Items.GREEN_DYE)
+                .unlockedBy("has_glow_ink_sac", has(Items.GLOW_INK_SAC))
                 .save(recipeOutput);
     }
 }

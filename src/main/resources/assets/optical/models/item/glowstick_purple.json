@@ -1,0 +1,27 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "gui_light": "front",
+  "base": {
+    "parent": "minecraft:item/generated",
+    "textures": {
+      "layer0": "optical:item/glowstick_off"
+    }
+  },
+  "perspectives": {
+    "thirdperson_righthand": { "parent": "optical:item/glowstick_3d_off" },
+    "thirdperson_lefthand": { "parent": "optical:item/glowstick_3d_off" },
+    "firstperson_righthand": { "parent": "optical:item/glowstick_3d_off" },
+    "firstperson_lefthand": { "parent": "optical:item/glowstick_3d_off" },
+    "ground": { "parent": "optical:item/glowstick_3d_off" },
+    "fixed": { "parent": "optical:item/glowstick_3d_off" },
+    "head": { "parent": "optical:item/glowstick_3d_off" }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "optical:active": 0.5
+      },
+      "model": "optical:item/glowstick_purple_on"
+    }
+  ]
+}

@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_glowstone": {
+    "has_glow_ink_sac": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:glowstone_dust"
+            "items": "minecraft:glow_ink_sac"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_glowstone"
+      "has_glow_ink_sac"
     ]
   ],
   "rewards": {

@@ -36,20 +36,19 @@ displayName="${mod_name}" #mandatory
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
-#logoFile="examplemod.png" #optional
+logoFile="examplemod.png" #optional
 
 # A text field displayed in the mod UI
 #credits="" #optional
 
 # The authors of the mod, displayed in the mod UI (optional)
-#authors=""
+authors="NovaVoidest"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Optical adds dynamic, colored light sources powered by Veil.
+Optical Mod adds dynamic, colored light sources powered by Veil!
 
-Use the Optical Key to aim and tune the Spotlight, and toggle the Light Diode or
-Glowstick for portable light.
+
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.

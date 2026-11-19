@@ -154,7 +154,8 @@ public final class OpticalKeyController {
     @SubscribeEvent
     public static void onInteraction(InputEvent.InteractionKeyMappingTriggered event) {
         if (event.isAttack()) {
-            boolean targeting = getTargetSpotlight() != null;
+            Minecraft minecraft = Minecraft.getInstance();
+            boolean targeting = isHoldingKey(minecraft.player) && getTargetSpotlight() != null;
             if (targeting) {
                 event.setCanceled(true);
                 event.setSwingHand(false);

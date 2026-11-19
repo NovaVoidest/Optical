@@ -54,9 +54,6 @@ public final class ClientLightManager {
     private static final float GLOWSTICK_BRIGHTNESS = 1.6F;
     private static final float GLOWSTICK_RADIUS = 12.0F;
     private static final float GLOWSTICK_INSCATTERING = 1.2F;
-    private static final float GLOWSTICK_RED = 0.25F;
-    private static final float GLOWSTICK_GREEN = 1.0F;
-    private static final float GLOWSTICK_BLUE = 0.3F;
 
     private static final float DIODE_FLICKER_AMOUNT = 0.04F;
     private static final float GLOWSTICK_FLICKER_AMOUNT = 0.05F;
@@ -165,7 +162,8 @@ public final class ClientLightManager {
         Vec3 position = player.getPosition(partialTick);
         glowstickLight.setPosition(position.x, position.y + 1.05D, position.z);
         glowstickLight.setBrightness(GLOWSTICK_BRIGHTNESS * strength * flicker);
-        glowstickLight.setColor(GLOWSTICK_RED, GLOWSTICK_GREEN, GLOWSTICK_BLUE);
+        GlowstickItem glowstick = (GlowstickItem) stack.getItem();
+        glowstickLight.setColor(glowstick.getLightRed(), glowstick.getLightGreen(), glowstick.getLightBlue());
         glowstickLight.setRadius(GLOWSTICK_RADIUS);
         glowstickLight.setOcclusionEnabled(true);
         glowstickLight.setInscatteringStrength(GLOWSTICK_INSCATTERING * strength);

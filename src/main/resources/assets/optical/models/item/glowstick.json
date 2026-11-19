@@ -21,7 +21,7 @@
       "predicate": {
         "optical:active": 0.5
       },
-      "model": "optical:item/glowstick_on"
+      "model": "optical:item/glowstick_cyan_on"
     }
   ]
 }

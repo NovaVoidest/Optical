@@ -4,7 +4,8 @@
   "package": "git.nova.optical.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "MouseHandlerMixin"
+    "MouseHandlerMixin",
+    "VoxelShadowGridMixin"
   ],
   "injectors": {
     "defaultRequire": 1

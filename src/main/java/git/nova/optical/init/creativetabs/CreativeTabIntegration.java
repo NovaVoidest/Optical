@@ -17,6 +17,9 @@ public final class CreativeTabIntegration {
         } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ModItems.OPTICAL_KEY.get());
             event.accept(ModItems.GLOWSTICK.get());
+            event.accept(ModItems.GLOWSTICK_BLUE.get());
+            event.accept(ModItems.GLOWSTICK_PURPLE.get());
+            event.accept(ModItems.GLOWSTICK_GREEN.get());
         }
     }
 }

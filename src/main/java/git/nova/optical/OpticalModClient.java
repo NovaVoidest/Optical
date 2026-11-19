@@ -26,12 +26,21 @@ public class OpticalModClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> ItemProperties.register(
-                ModItems.GLOWSTICK.get(),
+        event.enqueueWork(() -> {
+            registerGlowstickProperty(ModItems.GLOWSTICK.get());
+            registerGlowstickProperty(ModItems.GLOWSTICK_BLUE.get());
+            registerGlowstickProperty(ModItems.GLOWSTICK_PURPLE.get());
+            registerGlowstickProperty(ModItems.GLOWSTICK_GREEN.get());
+        });
+        OpticalMod.LOGGER.info("Optical client setup complete for {}", Minecraft.getInstance().getUser().getName());
+    }
+
+    private static void registerGlowstickProperty(net.minecraft.world.item.Item item) {
+        ItemProperties.register(
+                item,
                 ResourceLocation.fromNamespaceAndPath(OpticalMod.MODID, "active"),
                 (stack, level, entity, seed) -> git.nova.optical.common.item.GlowstickItem.isLit(stack) ? 1.0F : 0.0F
-        ));
-        OpticalMod.LOGGER.info("Optical client setup complete for {}", Minecraft.getInstance().getUser().getName());
+        );
     }
 
     @SubscribeEvent

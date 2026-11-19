@@ -4,7 +4,11 @@
 
   "item.optical.optical_key": "Optical Wrench",
   "item.optical.glowstick": "Glowstick",
+  "item.optical.glowstick_blue": "Glowstick",
+  "item.optical.glowstick_purple": "Glowstick",
+  "item.optical.glowstick_green": "Glowstick",
 
+  "tooltip.optical.glowstick.color": "Color",
   "tooltip.optical.glowstick.lit": "%ss of light left",
 
   "hud.optical.size": "Size",
