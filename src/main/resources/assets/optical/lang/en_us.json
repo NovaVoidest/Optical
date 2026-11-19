@@ -2,7 +2,7 @@
   "block.optical.spotlight": "Spotlight",
   "block.optical.light_diode": "Light Diode",
 
-  "item.optical.optical_key": "Optical Key",
+  "item.optical.optical_key": "Optical Wrench",
   "item.optical.glowstick": "Glowstick",
 
   "tooltip.optical.glowstick.lit": "%ss of light left",
